@@ -14,11 +14,17 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class ImageViewAdapter extends PagerAdapter {
     private Context mContext;
     private List<RemoteCard> mRemoteCards;
+
     public ImageViewAdapter(List<RemoteCard> remoteCards , Context context) {
         mRemoteCards = remoteCards;
         mContext = context;
@@ -67,26 +73,43 @@ public class ImageViewAdapter extends PagerAdapter {
      * @param position accepts the position of card
      */
     private void setViews(View parent, int position) {
-        ImageView view1 = parent.findViewById(R.id.card_image);
-        TextView view2 = parent.findViewById(R.id.card_title_text);
-        TextView view3 = parent.findViewById(R.id.card_body_text);
-        view1.setVisibility(View.INVISIBLE);
-        view2.setVisibility(View.INVISIBLE);
-        view3.setVisibility(View.INVISIBLE);
-
+        ImageView cardImageView = parent.findViewById(R.id.card_image);
+        TextView cardTitleTextView = parent.findViewById(R.id.card_title_text);
+        TextView cardBodyTextView = parent.findViewById(R.id.card_body_text);
+        TextView cardViewSeenTextView = parent.findViewById(R.id.card_seen_time);
         final RemoteCard remoteCard = mRemoteCards.get(position);
 
             if (remoteCard.getImageBase64() != null) {
-                view1.setVisibility(View.VISIBLE);
-                Glide.with(mContext).asBitmap().load(remoteCard.getImageBase64()).placeholder(R.drawable.ic_launcher_background).into(view1);
+                cardImageView.setVisibility(View.VISIBLE);
+//                Glide.with(mContext).asBitmap().load(remoteCard.getImageBase64()).placeholder(R.drawable.ic_launcher_background).into(cardImageView);
+                Glide.with(mContext).load(remoteCard.getImageBase64()).placeholder(R.drawable.ic_launcher_background).into(cardImageView);
+            }
+            if (remoteCard.getImageUrl() != null) {
+                cardImageView.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(remoteCard.getImageUrl()).into(cardImageView);
+            }
+            if (remoteCard.getDate() != null) {
+                cardViewSeenTextView.setVisibility(View.VISIBLE);
+                final String dateString = remoteCard.getDate();
+                StringBuilder date = new StringBuilder();
+                for (int i = 0; i < dateString.length(); i++) {
+                    final char codePoint = dateString.charAt(i);
+                    if (Character.isAlphabetic(codePoint)) {
+                        break;
+                    }
+                    date.append(codePoint);
+                }
+                final Date date1 = Date.valueOf(date.toString());
+                SimpleDateFormat formatDate = new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault());
+                cardViewSeenTextView.setText(formatDate.format(date1));
             }
             if (remoteCard.getHeading() != null) {
-                view2.setVisibility(View.VISIBLE);
-                view2.setText(remoteCard.getHeading());
+                cardTitleTextView.setVisibility(View.VISIBLE);
+                cardTitleTextView.setText(remoteCard.getHeading());
             }
             if (remoteCard.getBodyText() != null) {
-                view3.setVisibility(View.VISIBLE);
-                view3.setText(remoteCard.getBodyText());
+                cardBodyTextView.setVisibility(View.VISIBLE);
+                cardBodyTextView.setText(remoteCard.getBodyText());
             }
     }
 

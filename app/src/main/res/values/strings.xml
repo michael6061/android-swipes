@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">android-swipes</string>
+    <string name="cards">Cards</string>
+    <string name="opendrawer">Open Drawer</string>
+    <string name="closedrawer">Close Drawer</string>
+    <string name="gaming">Gaming</string>
+    <string name="technology">Technology</string>
 </resources>

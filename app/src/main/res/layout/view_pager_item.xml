@@ -27,7 +27,7 @@
                 android:filterTouchesWhenObscured="false"
                 android:fitsSystemWindows="true"
                 android:scaleType="fitXY"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constrainedHeight="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,12 +38,12 @@
                 android:id="@+id/card_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textNoSuggestions"
                 android:textAlignment="textStart"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_image"
                 tools:text="Sample text" />
@@ -55,6 +55,7 @@
                 android:inputType="textShortMessage"
                 android:text="Today"
                 android:textSize="14sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_title_text" />
@@ -63,6 +64,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,12 +72,13 @@
 
                 <TextView
                     android:id="@+id/card_body_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="fill_horizontal|end"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textNoSuggestions"
                     android:text="body text"
                     android:textSize="18sp"
+                    android:visibility="invisible"
                     app:autoSizeTextType="uniform" />
             </ScrollView>
 

@@ -1,59 +1,57 @@
 package com.project.android_swipes.Utility;
 
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.project.android_swipes.R;
 import com.project.android_swipes.RemoteCard;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class JsonUtility {
     private static final String TAG = "JsonUtility";
-    public static final String JSON_IMAGE = "image";
+    public static final String JSON_STATUS = "status";
+    public static final String JSON_TOTAL_RESULTS = "totalResults";
+    public static final String JSON_ARTICLES = "articles";
     public static final String JSON_TITLE = "title";
-    public static final String JSON_TEXT = "text";
-    public static final String JSON_DATE = "date";
+    public static final String JSON_DESCRIPTION = "description";
+    public static final String JSON_PUBLISHED_AT = "publishedAt";
+    public static final String JSON_URL_TO_IMAGE = "urlToImage";
 
-    /**
-     * this function accepts content of json file as String and fetches each RemoteCard
-     *  Object from it and add it to a list of RemoteCard
-     * @param jsonContents String representation of the json file contents
-     * @return List of the RemoteCards from the json file
-     */
-    public static List<RemoteCard> getRemoteCardsFromJson(String jsonContents) {
+    public static List<RemoteCard> getRemoteCardsFromJson(String jsonContents,int numberOfCardsToFetch , int numberOfCardsAlreadyFetched) {
         List<RemoteCard> remoteCards = new ArrayList<>();
+        JSONObject jsonObject = null;
         try {
-            JSONObject jsonObject = new JSONObject(jsonContents);
-            String cardsArrayName = jsonObject.keys().next();
-            JSONObject jsonArrayObject = jsonObject.getJSONObject(cardsArrayName);
+            jsonObject = new JSONObject(jsonContents);
+            final String status = jsonObject.getString(JSON_STATUS);
+            if (!status.equals("ok")) return null;
+            final int totalResults = jsonObject.getInt(JSON_TOTAL_RESULTS);
+            if (totalResults == 0) return null;
+            final JSONArray articles = jsonObject.getJSONArray(JSON_ARTICLES);
 
-            final Iterator<String> keys = jsonArrayObject.keys();
-            while (keys.hasNext()){
-                final JSONObject object = jsonArrayObject.getJSONObject(keys.next());
-                String image64 = object.getString(JSON_IMAGE);
-                String title = object.getString(JSON_TITLE);
-                String text = object.getString(JSON_TEXT);
-                String date = object.getString(JSON_DATE);
-                byte[] imageDecoded = Base64.decode(image64,Base64.DEFAULT);
-                RemoteCard card = new RemoteCard(imageDecoded,title,text,date);
-                remoteCards.add(card);
+            for (int i = numberOfCardsAlreadyFetched ; i < Math.min(numberOfCardsToFetch,totalResults); i++){
+                final JSONObject article = articles.getJSONObject(i);
+                final String title = article.getString(JSON_TITLE);
+                final String content = article.getString(JSON_DESCRIPTION);
+                final String date = article.getString(JSON_PUBLISHED_AT);
+                final String urlToImage = article.getString(JSON_URL_TO_IMAGE);
+                RemoteCard remoteCard = new RemoteCard(urlToImage,title,content,date);
+                remoteCards.add(remoteCard);
             }
-            return remoteCards;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null;
+        return remoteCards;
     }
-
     /**
      * get the input Stream of the json file read it and add its contents to the string
      * and return the produced string
