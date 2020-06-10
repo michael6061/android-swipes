@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_group_main"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/gaming_nav_menu"
+            android:icon="@drawable/ic_videogame_asset_black_24dp"
+            android:title="@string/gaming" />
+        <item
+            android:id="@+id/startup_nav_menu"
+            android:icon="@drawable/ic_cloud_black_24dp"
+            android:title="Start-Ups" />
+        <item
+            android:id="@+id/fintech_nav_menu"
+            android:title="Fintech" />
+        <item
+            android:id="@+id/acquire_nav_menu"
+            android:title="Acquisitions" />
+
+    </group>
+</menu>
